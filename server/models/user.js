@@ -68,13 +68,24 @@ const userSchema = new mongoose.Schema(
 );
 
 // Hook: hashear password antes de guardar
-userSchema.pre('save', async function (next) {
+userSchema.pre('save', async function () {
+
+    // Solo hashear si el password fue modificado
+    if (!this.isModified('password')) {
+        return;
+    }
+
+    const salt = await bcrypt.genSalt(12);
+
+    this.password = await bcrypt.hash(this.password, salt);
+});
+/* userSchema.pre('save', async function (next) {
     // Solo hashear si el password fue modificado
     if (!this.isModified('password')) return next();
     const salt = await bcrypt.genSalt(12);
     this.password = await bcrypt.hash(this.password, salt);
     next();
-});
+}); */
 
 // Metodo de instancia: comparar password
 userSchema.methods.matchPassword = async function (enteredPassword) {
