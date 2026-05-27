@@ -100,7 +100,7 @@ const register = async (req, res, next) => {
 
     } catch (error) {
 
-   
+
         // MODIFICADO:
         // ANTES TENÍAS:
         //
