@@ -12,6 +12,7 @@ import Unauthorized from './pages/Unauthorized'
 import AdminDashboard   from './pages/admin/AdminDashboard'
 import TrainerDashboard from './pages/trainer/TrainerDashboard'
 import MemberDashboard  from './pages/member/MemberDashboard'
+import Profile from './pages/profile/Profile'
 
 // Placeholder para rutas futuras
 const ComingSoon = ({ name }) => (
@@ -68,6 +69,7 @@ function App() {
         <Route path="/member/plans"      element={<ComingSoon name="Mis Planes" />} />
         <Route path="/member/attendance" element={<ComingSoon name="Mi Asistencia" />} />
         <Route path="/member/payments"   element={<ComingSoon name="Mis Pagos" />} />
+        <Route path="/profile" element={<Profile />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />
