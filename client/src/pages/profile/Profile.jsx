@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { useAuth } from '../../context/AuthContext'
-import { updateProfile, changePassword } from '../../services/user.service'
+import { updateProfile, changePassword, uploadAvatar } from '../../services/user.service'
 import Input from '../../components/ui/Input'
 import Button from '../../components/ui/Button'
 import Card from '../../components/ui/Card'
+
 
 const ROLE_LABELS = { admin: 'Administrador', trainer: 'Entrenador', member: 'Miembro' }
 const ROLE_COLORS = {
@@ -27,12 +28,38 @@ const Profile = () => {
         confirmPassword: '',
     })
 
+    //Estados para mensajes y errores
     const [errors, setErrors] = useState({})
     const [pwErrors, setPwErrors] = useState({})
     const [msg, setMsg] = useState('')
     const [pwMsg, setPwMsg] = useState('')
     const [loading, setLoading] = useState(false)
     const [pwLoading, setPwLoading] = useState(false)
+    const [avatarLoading, setAvatarLoading] = useState(false)
+    const [avatarMsg, setAvatarMsg] = useState('')
+    const [avatarPreview, setAvatarPreview] = useState(
+        user?.avatar ? `http://localhost:5000${user.avatar}` : null
+    )
+
+    //handlers
+
+    const handleAvatarChange = async (e) => {
+        const file = e.target.files[0]
+        if (!file) return
+
+        setAvatarLoading(true)
+        setAvatarMsg('')
+        try {
+            const { data } = await uploadAvatar(user._id, file)
+            setAvatarMsg('✅ Foto actualizada')
+            // Actualizar preview local
+            setAvatarPreview(URL.createObjectURL(file))
+        } catch (err) {
+            setAvatarMsg('❌ ' + (err.response?.data?.message || 'Error al subir imagen'))
+        } finally {
+            setAvatarLoading(false)
+        }
+    }
 
     const handleUpdate = async (e) => {
         e.preventDefault()
@@ -84,16 +111,49 @@ const Profile = () => {
             {/* Header del perfil */}
             <Card>
                 <div className="flex items-center gap-5">
-                    <div className="w-16 h-16 rounded-full bg-primary-700 text-white flex items-center justify-center text-2xl font-bold flex-shrink-0">
-                        {user?.name?.charAt(0).toUpperCase()}
+
+                    {/* Avatar con botón de upload */}
+                    <div className="relative flex-shrink-0">
+                        <div className="w-16 h-16 rounded-full bg-primary-700 text-white flex items-center justify-center text-2xl font-bold overflow-hidden">
+                            {avatarPreview
+                                ? <img src={avatarPreview} alt="avatar" className="w-full h-full object-cover" />
+                                : user?.name?.charAt(0).toUpperCase()
+                            }
+                        </div>
+
+                        {/* Botón cambiar foto */}
+                        <label className="absolute -bottom-1 -right-1 w-6 h-6 bg-primary-600 hover:bg-primary-800
+        rounded-full flex items-center justify-center cursor-pointer transition-colors shadow">
+                            {avatarLoading
+                                ? <svg className="animate-spin h-3 w-3 text-white" viewBox="0 0 24 24" fill="none">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                                </svg>
+                                : <span className="text-white text-xs">✎</span>
+                            }
+                            <input
+                                type="file"
+                                accept="image/jpeg,image/png,image/webp"
+                                className="hidden"
+                                onChange={handleAvatarChange}
+                                disabled={avatarLoading}
+                            />
+                        </label>
                     </div>
+
                     <div>
                         <h2 className="text-xl font-bold text-gray-800">{user?.name}</h2>
-                        <p className="text-sm text-gray-400 mb-2">{user?.email}</p>
+                        <p className="text-sm text-gray-400 mb-1">{user?.email}</p>
+                        {avatarMsg && (
+                            <p className={`text-xs ${avatarMsg.startsWith('✅') ? 'text-green-600' : 'text-red-500'}`}>
+                                {avatarMsg}
+                            </p>
+                        )}
                         <span className={`text-xs font-medium px-3 py-1 rounded-full ${ROLE_COLORS[user?.role]}`}>
                             {ROLE_LABELS[user?.role]}
                         </span>
                     </div>
+
                 </div>
             </Card>
 
@@ -101,8 +161,8 @@ const Profile = () => {
             <Card title="Información Personal">
                 {msg && (
                     <div className={`mb-4 p-3 rounded-lg text-sm ${msg.startsWith('✅')
-                            ? 'bg-green-50 text-green-700 border border-green-200'
-                            : 'bg-red-50 text-red-600 border border-red-200'
+                        ? 'bg-green-50 text-green-700 border border-green-200'
+                        : 'bg-red-50 text-red-600 border border-red-200'
                         }`}>
                         {msg}
                     </div>
@@ -152,8 +212,8 @@ const Profile = () => {
             <Card title="Cambiar Contraseña">
                 {pwMsg && (
                     <div className={`mb-4 p-3 rounded-lg text-sm ${pwMsg.startsWith('✅')
-                            ? 'bg-green-50 text-green-700 border border-green-200'
-                            : 'bg-red-50 text-red-600 border border-red-200'
+                        ? 'bg-green-50 text-green-700 border border-green-200'
+                        : 'bg-red-50 text-red-600 border border-red-200'
                         }`}>
                         {pwMsg}
                     </div>
@@ -199,8 +259,8 @@ const Profile = () => {
                         </p>
                     </div>
                     <span className={`text-sm font-medium px-3 py-1.5 rounded-full ${user?.subscription?.status === 'active'
-                            ? 'bg-green-100 text-green-700'
-                            : 'bg-gray-100 text-gray-500'
+                        ? 'bg-green-100 text-green-700'
+                        : 'bg-gray-100 text-gray-500'
                         }`}>
                         {user?.subscription?.status === 'active' ? 'Activa' : 'Inactiva'}
                     </span>

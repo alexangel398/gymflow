@@ -1,5 +1,7 @@
 const User = require('../models/User');
 const { validationResult } = require('express-validator');
+const path = require('path');
+const fs   = require('fs');
 
 // @route  GET /api/users
 // @access Admin
@@ -142,4 +144,42 @@ const changePassword = async (req, res, next) => {
     }
 };
 
-module.exports = { getUsers, getUserById, updateUser, changePassword };
+// @route  POST /api/users/:id/avatar
+// @access Self
+const uploadAvatar = async (req, res, next) => {
+    try {
+        if (req.user.id !== req.params.id && req.user.role !== 'admin') {
+            return res.status(403).json({ success: false, message: 'Acción no permitida' });
+        }
+
+        if (!req.file) {
+            return res.status(400).json({ success: false, message: 'No se recibió ninguna imagen' });
+        }
+
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'Usuario no encontrado' });
+        }
+
+        // Borrar avatar anterior si existe
+        if (user.avatar) {
+            const oldPath = path.join(__dirname, '../', user.avatar);
+            if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+        }
+
+        // Guardar ruta relativa en la BD
+        const avatarUrl = `/uploads/avatars/${req.file.filename}`;
+        user.avatar = avatarUrl;
+        await user.save();
+
+        res.json({
+            success: true,
+            message: 'Avatar actualizado correctamente',
+            data: { avatar: avatarUrl },
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+module.exports = { getUsers, getUserById, updateUser, changePassword, uploadAvatar };

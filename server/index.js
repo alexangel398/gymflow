@@ -4,6 +4,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const connectDB = require('./config/db');
+const path = require('path');
 
 const app = express();
 
@@ -18,6 +19,12 @@ app.use(cors({
     credentials: true,
 }));
 app.use(express.json());
+// Servir archivos subidos
+app.use('/uploads', (req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', process.env.FRONTEND_URL);
+    res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+    next();
+}, express.static(path.join(__dirname, 'uploads')));
 app.use(express.urlencoded({ extended: true }));
 
 // Rutas

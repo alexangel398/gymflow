@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const { body } = require('express-validator');
+const upload = require('../config/multer');
 const {
-    getUsers, getUserById, updateUser, changePassword
+    getUsers, getUserById, updateUser, changePassword, uploadAvatar
 } = require('../controllers/user.controller');
 const {
     authenticateToken, authorizeRole
@@ -28,5 +29,6 @@ router.get('/', authenticateToken, authorizeRole('admin'), getUsers);
 router.get('/:id', authenticateToken, getUserById);
 router.put('/:id', authenticateToken, updateValidation, updateUser);
 router.put('/:id/password', authenticateToken, passwordValidation, changePassword);
+router.post('/:id/avatar', authenticateToken, upload.single('avatar'), uploadAvatar);
 
 module.exports = router;
