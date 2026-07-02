@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { body } = require('express-validator');
-const upload = require('../config/multer');
+const {upload} = require('../config/multer');
 const {
     getUsers, getUserById, updateUser, changePassword, uploadAvatar
 } = require('../controllers/user.controller');

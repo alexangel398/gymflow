@@ -2,6 +2,7 @@ const User = require('../models/User');
 const { validationResult } = require('express-validator');
 const path = require('path');
 const fs   = require('fs');
+const { upload } = require('../config/multer');
 
 // @route  GET /api/users
 // @access Admin

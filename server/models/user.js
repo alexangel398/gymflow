@@ -42,6 +42,34 @@ const userSchema = new mongoose.Schema(
             maxlength: [500, 'La bio no puede superar 500 caracteres'],
             default: '',
         },
+        
+        // Perfil extendido para entrenadores
+        trainerProfile: {
+            specialties: {
+                type: [String],
+                enum: ['yoga', 'crossfit', 'spinning', 'pilates', 'funcional', 'hiit', 'boxeo', 'nutricion', 'otro'],
+                default: [],
+            },
+            certifications: {
+                type: [String],
+                default: [],
+            },
+            experience: {
+                type: Number, // años de experiencia
+                default: 0,
+            },
+            availability: {
+                type: [Number], // días disponibles [1,2,3,4,5] = Lun-Vie
+                default: [1, 2, 3, 4, 5],
+            },
+            assignedMembers: [
+                {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: 'User',
+                },
+            ],
+        },
+
         isActive: {
             type: Boolean,
             default: true,

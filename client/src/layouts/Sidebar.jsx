@@ -20,6 +20,7 @@ const menuByRole = {
     member: [
         { label: 'Dashboard', path: '/member/dashboard', icon: '📊' },
         { label: 'Clases', path: '/member/classes', icon: '📅' },
+        { label: 'Mis Clases',    path: '/member/my-classes',  icon: '✅' },
         { label: 'Mis Planes', path: '/member/plans', icon: '📋' },
         { label: 'Asistencia', path: '/member/attendance', icon: '✅' },
         { label: 'Pagos', path: '/member/payments', icon: '💳' },
