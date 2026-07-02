@@ -19,6 +19,11 @@ app.use(cors({
     credentials: true,
 }));
 app.use(express.json());
+// Deshabilitar caché en desarrollo
+app.use((req, res, next) => {
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+    next();
+});
 // Servir archivos subidos
 app.use('/uploads', (req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', process.env.FRONTEND_URL);
@@ -30,6 +35,7 @@ app.use(express.urlencoded({ extended: true }));
 // Rutas
 app.use('/api/auth', require('./routes/auth.routes'));
 app.use('/api/users', require('./routes/user.routes'));
+app.use('/api/classes', require('./routes/class.routes'));
 
 // Health check
 app.get('/api/health', (req, res) => {

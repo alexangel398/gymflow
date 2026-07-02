@@ -13,6 +13,8 @@ import AdminDashboard   from './pages/admin/AdminDashboard'
 import TrainerDashboard from './pages/trainer/TrainerDashboard'
 import MemberDashboard  from './pages/member/MemberDashboard'
 import Profile from './pages/profile/Profile'
+import ClassCalendar from './pages/classes/ClassCalendar'
+import MyClasses     from './pages/classes/MyClasses'
 
 // Placeholder para rutas futuras
 const ComingSoon = ({ name }) => (
@@ -48,28 +50,33 @@ function App() {
         <Route path="/admin/dashboard"  element={<AdminDashboard />} />
         <Route path="/admin/members"    element={<ComingSoon name="Gestión de Miembros" />} />
         <Route path="/admin/trainers"   element={<ComingSoon name="Gestión de Entrenadores" />} />
-        <Route path="/admin/classes"    element={<ComingSoon name="Clases" />} />
+        <Route path="/admin/classes"    element={<ClassCalendar name="Clases" />} />
         <Route path="/admin/payments"   element={<ComingSoon name="Pagos" />} />
         <Route path="/admin/attendance" element={<ComingSoon name="Asistencia" />} />
+        {/* <Route path="/admin/classes" element={<ClassCalendar />} /> */}
       </Route>
 
       {/* Trainer */}
       <Route element={<ProtectedRoute allowedRoles={['trainer','admin']}><MainLayout /></ProtectedRoute>}>
         <Route path="/trainer/dashboard"  element={<TrainerDashboard />} />
-        <Route path="/trainer/classes"    element={<ComingSoon name="Mis Clases" />} />
-        <Route path="/trainer/members"    element={<ComingSoon name="Mis Alumnos" />} />
+        <Route path="/trainer/classes"    element={<ClassCalendar name="Mis Clases" />} />
+        <Route path="/trainer/members"    element={<MyClasses name="Mis Alumnos" />} />
         <Route path="/trainer/plans"      element={<ComingSoon name="Planes" />} />
         <Route path="/trainer/attendance" element={<ComingSoon name="Asistencia" />} />
+        {/* <Route path="/trainer/classes"  element={<ClassCalendar />} />
+        <Route path="/trainer/members"  element={<MyClasses />} /> */}
       </Route>
 
       {/* Member */}
       <Route element={<ProtectedRoute allowedRoles={['member','trainer','admin']}><MainLayout /></ProtectedRoute>}>
         <Route path="/member/dashboard"  element={<MemberDashboard />} />
-        <Route path="/member/classes"    element={<ComingSoon name="Clases Disponibles" />} />
-        <Route path="/member/plans"      element={<ComingSoon name="Mis Planes" />} />
+        <Route path="/member/classes"    element={<ClassCalendar name="Clases Disponibles" />} />
+        <Route path="/member/plans"      element={<MyClasses name="Mis Planes" />} />
         <Route path="/member/attendance" element={<ComingSoon name="Mi Asistencia" />} />
         <Route path="/member/payments"   element={<ComingSoon name="Mis Pagos" />} />
         <Route path="/profile" element={<Profile />} />
+        {/* <Route path="/member/classes" element={<ClassCalendar />} />
+        <Route path="/member/plans"   element={<MyClasses />} /> */}
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />
