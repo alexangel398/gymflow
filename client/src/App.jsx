@@ -9,6 +9,8 @@ import Register from './pages/auth/Register'
 import Unauthorized from './pages/Unauthorized'
 
 // Dashboards
+import MemberAttendance  from './pages/member/MemberAttendance'
+import AttendanceScanner from './pages/attendance/AttendanceScanner'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import TrainerDashboard from './pages/trainer/TrainerDashboard'
 import MemberDashboard from './pages/member/MemberDashboard'
@@ -54,8 +56,7 @@ function App() {
         <Route path="/admin/trainers" element={<TrainerList name="Gestión de Entrenadores" />} />
         <Route path="/admin/classes" element={<ClassCalendar name="Clases" />} />
         <Route path="/admin/payments" element={<ComingSoon name="Pagos" />} />
-        <Route path="/admin/attendance" element={<ComingSoon name="Asistencia" />} />
-        {/* <Route path="/admin/classes" element={<ClassCalendar />} /> */}
+        <Route path="/admin/attendance" element={<AttendanceScanner name="Asistencia" />} />
       </Route>
 
       {/* Trainer */}
@@ -64,9 +65,8 @@ function App() {
         <Route path="/trainer/classes" element={<ClassCalendar name="Mis Clases" />} />
         <Route path="/trainer/members" element={<TrainerList name="Mis Alumnos" />} />
         <Route path="/trainer/plans" element={<ComingSoon name="Planes" />} />
-        <Route path="/trainer/attendance" element={<ComingSoon name="Asistencia" />} />
-        {/* <Route path="/trainer/classes"  element={<ClassCalendar />} />
-        <Route path="/trainer/members"  element={<MyClasses />} /> */}
+        <Route path="/trainer/attendance" element={<AttendanceScanner name="Asistencia" />} />
+        
       </Route>
 
       {/* Member */}
@@ -75,11 +75,10 @@ function App() {
         <Route path="/member/classes" element={<ClassCalendar name="Clases Disponibles" />} />
         <Route path="/member/my-classes" element={<MyClasses />} />
         <Route path="/member/plans" element={<MyPlans name="Mis Planes" />} />
-        <Route path="/member/attendance" element={<ComingSoon name="Mi Asistencia" />} />
+        <Route path="/member/attendance" element={<MemberAttendance name="Mi Asistencia" />} />
         <Route path="/member/payments" element={<ComingSoon name="Mis Pagos" />} />
         <Route path="/profile" element={<Profile />} />
-        {/* <Route path="/member/classes" element={<ClassCalendar />} />
-        <Route path="/member/plans"   element={<MyClasses />} /> */}
+        
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />

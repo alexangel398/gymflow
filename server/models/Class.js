@@ -71,19 +71,23 @@ const classSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
+
 // Virtual: cantidad de inscriptos
 classSchema.virtual('enrolledCount').get(function () {
-    return this.enrolled.length;
+    const enrolled = Array.isArray(this.enrolled) ? this.enrolled : [];
+    return enrolled.length;
 });
 
 // Virtual: cupos disponibles
 classSchema.virtual('availableSpots').get(function () {
-    return this.capacity - this.enrolled.length;
+    const enrolled = Array.isArray(this.enrolled) ? this.enrolled : [];
+    return (this.capacity ?? 0) - enrolled.length;
 });
 
 // Virtual: si la clase está llena
 classSchema.virtual('isFull').get(function () {
-    return this.enrolled.length >= this.capacity;
+    const enrolled = Array.isArray(this.enrolled) ? this.enrolled : [];
+    return enrolled.length >= (this.capacity ?? 0);
 });
 
 classSchema.set('toJSON', { virtuals: true });

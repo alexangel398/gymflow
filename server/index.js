@@ -38,6 +38,7 @@ app.use('/api/users', require('./routes/user.routes'));
 app.use('/api/classes', require('./routes/class.routes'));
 app.use('/api/trainers', require('./routes/trainer.routes'));
 app.use('/api/plans',    require('./routes/plan.routes'));
+app.use('/api/attendance', require('./routes/attendance.routes'));
 
 // Health check
 app.get('/api/health', (req, res) => {
