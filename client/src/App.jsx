@@ -24,9 +24,12 @@ import ClassCalendar from './pages/classes/ClassCalendar'
 import MyClasses from './pages/classes/MyClasses'
 import TrainerList from './pages/trainer/TrainerList'
 import MyPlans from './pages/member/MyPlans'
+import MembersPage from './pages/admin/MembersPage'
+import TrainerMembersList from './pages/trainer/TrainerMembersList'
+import TrainerCreatePlanPage from './pages/trainer/TrainerCreatePlanPage';
 
 // Placeholder para rutas futuras
-const ComingSoon = ({ name }) => (
+/* const ComingSoon = ({ name }) => (
   <div className="flex items-center justify-center h-64">
     <div className="text-center">
       <p className="text-4xl mb-3">🚧</p>
@@ -34,7 +37,7 @@ const ComingSoon = ({ name }) => (
       <p className="text-sm text-gray-400 mt-1">Disponible en próximos sprints</p>
     </div>
   </div>
-)
+) */
 
 const RoleRedirect = () => {
   const { user, loading } = useAuth()
@@ -60,7 +63,7 @@ function App() {
       {/* Admin */}
       <Route element={<ProtectedRoute allowedRoles={['admin']}><MainLayout /></ProtectedRoute>}>
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
-        <Route path="/admin/members" element={<ComingSoon name="Gestión de Miembros" />} />
+        <Route path="/admin/members" element={<MembersPage name="Gestión de Miembros" />} />
         <Route path="/admin/trainers" element={<TrainerList name="Gestión de Entrenadores" />} />
         <Route path="/admin/classes" element={<ClassCalendar name="Clases" />} />
         <Route path="/admin/payments" element={<AdminPayments name="Pagos" />} />
@@ -71,8 +74,8 @@ function App() {
       <Route element={<ProtectedRoute allowedRoles={['trainer', 'admin']}><MainLayout /></ProtectedRoute>}>
         <Route path="/trainer/dashboard" element={<TrainerDashboard />} />
         <Route path="/trainer/classes" element={<ClassCalendar name="Mis Clases" />} />
-        <Route path="/trainer/members" element={<TrainerList name="Mis Alumnos" />} />
-        <Route path="/trainer/plans" element={<ComingSoon name="Planes" />} />
+        <Route path="/trainer/members" element={<TrainerMembersList name="Mis Alumnos" />} />
+        <Route path="/trainer/create-plan" element={<TrainerCreatePlanPage />} />
         <Route path="/trainer/attendance" element={<AttendanceScanner name="Asistencia" />} />
 
       </Route>

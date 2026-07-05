@@ -3,7 +3,7 @@ const router = express.Router();
 const { body } = require('express-validator');
 const {upload} = require('../config/multer');
 const {
-    getUsers, getUserById, updateUser, changePassword, uploadAvatar
+    getUsers, getUserById, updateUser, changePassword, uploadAvatar, deleteUser, getAssignedMembers
 } = require('../controllers/user.controller');
 const {
     authenticateToken, authorizeRole
@@ -26,9 +26,11 @@ const passwordValidation = [
 ];
 
 router.get('/', authenticateToken, authorizeRole('admin'), getUsers);
+router.delete('/:id', authenticateToken, authorizeRole('admin'), deleteUser);
 router.get('/:id', authenticateToken, getUserById);
 router.put('/:id', authenticateToken, updateValidation, updateUser);
 router.put('/:id/password', authenticateToken, passwordValidation, changePassword);
 router.post('/:id/avatar', authenticateToken, upload.single('avatar'), uploadAvatar);
+router.get('/assigned-members', authenticateToken, authorizeRole('trainer'), getAssignedMembers);
 
 module.exports = router;

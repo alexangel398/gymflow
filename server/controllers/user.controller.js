@@ -4,6 +4,15 @@ const path = require('path');
 const fs   = require('fs');
 const { upload } = require('../config/multer');
 
+// Agrega esto a tus controladores si no existe
+const deleteUser = async (req, res) => {
+    try {
+        await User.findByIdAndDelete(req.params.id);
+        res.json({ success: true, message: 'Usuario eliminado' });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Error al borrar' });
+    }
+};
 // @route  GET /api/users
 // @access Admin
 const getUsers = async (req, res, next) => {
@@ -183,4 +192,23 @@ const uploadAvatar = async (req, res, next) => {
     }
 };
 
-module.exports = { getUsers, getUserById, updateUser, changePassword, uploadAvatar };
+// @route  GET /api/users/assigned-members
+// @access Trainer
+const getAssignedMembers = async (req, res, next) => {
+    try {
+        // Log para ver qué llega
+        console.log("Usuario autenticado:", req.user); 
+        
+        const trainer = await User.findById(req.user.id).populate('trainerProfile.assignedMembers', 'name email avatar');
+        
+        if (!trainer) {
+            return res.status(404).json({ success: false, message: 'Entrenador no encontrado' });
+        }
+
+        res.json({ success: true, data: trainer.trainerProfile.assignedMembers || [] });
+    } catch (error) {
+        next(error);
+    }
+};
+
+module.exports = { getUsers, getUserById, updateUser, changePassword, uploadAvatar, deleteUser, getAssignedMembers };

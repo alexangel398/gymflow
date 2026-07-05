@@ -1,3 +1,4 @@
+import { useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext'
 import NotificationBell from '../components/NotificationBell'
 
@@ -23,7 +24,8 @@ const pageTitles = {
 
 const Navbar = ({ onMenuClick }) => {
     const { user } = useAuth()
-    const title = pageTitles[window.location.pathname] || 'GymFlow'
+    const location = useLocation();
+    const title = pageTitles[location.pathname] || 'GymFlow'
 
     return (
         <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 lg:px-6">
