@@ -2,6 +2,7 @@ const User = require('../models/User');
 const { sendEnrollmentEmail } = require('../services/email.service');
 const Class = require('../models/Class');
 const { validationResult } = require('express-validator');
+const { createNotification } = require('./notification.controller');
 
 // @route  GET /api/classes
 // @access Todos (autenticados)
@@ -177,6 +178,15 @@ const enrollClass = async (req, res, next) => {
         } catch (emailError) {
             console.error('[EMAIL ERROR]', emailError.message);
         }
+
+        // Crear notificacion en app
+        await createNotification({
+            userId: req.user.id,
+            title: `Inscripto en ${gymClass.name}`,
+            message: `Te inscribiste a ${gymClass.name} el ${['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'][gymClass.schedule.dayOfWeek]} a las ${gymClass.schedule.startTime}hs`,
+            type: 'class',
+            link: '/member/my-classes',
+        });
 
         res.json({
             success: true,

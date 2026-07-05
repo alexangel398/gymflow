@@ -3,6 +3,7 @@ const User = require('../models/User');
 const path = require('path');
 const fs = require('fs');
 const { sendPlanAssignedEmail } = require('../services/email.service');
+const { createNotification } = require('./notification.controller');
 
 // @route  GET /api/plans
 // @access Admin | Trainer (sus planes)
@@ -121,6 +122,14 @@ const createPlan = async (req, res, next) => {
         } catch (emailErr) {
             console.error('[EMAIL ERROR]', emailErr.message);
         }
+
+        await createNotification({
+            userId: member,
+            title: `Nuevo plan asignado: ${title}`,
+            message: `Tu entrenador te asigno el plan "${title}" de tipo ${type === 'workout' ? 'entrenamiento' : 'dieta'}`,
+            type: 'plan',
+            link: '/member/plans',
+        });
 
         res.status(201).json({
             success: true,

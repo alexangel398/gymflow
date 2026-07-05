@@ -42,7 +42,7 @@ const userSchema = new mongoose.Schema(
             maxlength: [500, 'La bio no puede superar 500 caracteres'],
             default: '',
         },
-        
+
         // Perfil extendido para entrenadores
         trainerProfile: {
             specialties: {
@@ -68,6 +68,14 @@ const userSchema = new mongoose.Schema(
                     ref: 'User',
                 },
             ],
+        },
+
+        notificationPrefs: {
+            emailClasses: { type: Boolean, default: true },
+            emailPayments: { type: Boolean, default: true },
+            emailPlans: { type: Boolean, default: true },
+            smsClasses: { type: Boolean, default: false },
+            smsPayments: { type: Boolean, default: false },
         },
 
         isActive: {
