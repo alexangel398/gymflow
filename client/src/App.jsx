@@ -9,14 +9,19 @@ import Register from './pages/auth/Register'
 import Unauthorized from './pages/Unauthorized'
 
 // Dashboards
-import MemberAttendance  from './pages/member/MemberAttendance'
+import Plans from './pages/payments/Plans'
+import PaymentSuccess from './pages/payments/PaymentSuccess'
+import PaymentCancel from './pages/payments/PaymentCancel'
+import AdminPayments from './pages/admin/AdminPayments'
+import MemberPayments from './pages/member/MemberPayments'
+import MemberAttendance from './pages/member/MemberAttendance'
 import AttendanceScanner from './pages/attendance/AttendanceScanner'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import TrainerDashboard from './pages/trainer/TrainerDashboard'
 import MemberDashboard from './pages/member/MemberDashboard'
 import Profile from './pages/profile/Profile'
 import ClassCalendar from './pages/classes/ClassCalendar'
-import MyClasses from './pages/classes/MyClasses' 
+import MyClasses from './pages/classes/MyClasses'
 import TrainerList from './pages/trainer/TrainerList'
 import MyPlans from './pages/member/MyPlans'
 
@@ -48,6 +53,9 @@ function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/unauthorized" element={<Unauthorized />} />
       <Route path="/" element={<RoleRedirect />} />
+      {/* Rutas publicas de pago */}
+      <Route path="/payment/success" element={<PaymentSuccess />} />
+      <Route path="/payment/cancel" element={<PaymentCancel />} />
 
       {/* Admin */}
       <Route element={<ProtectedRoute allowedRoles={['admin']}><MainLayout /></ProtectedRoute>}>
@@ -55,7 +63,7 @@ function App() {
         <Route path="/admin/members" element={<ComingSoon name="Gestión de Miembros" />} />
         <Route path="/admin/trainers" element={<TrainerList name="Gestión de Entrenadores" />} />
         <Route path="/admin/classes" element={<ClassCalendar name="Clases" />} />
-        <Route path="/admin/payments" element={<ComingSoon name="Pagos" />} />
+        <Route path="/admin/payments" element={<AdminPayments name="Pagos" />} />
         <Route path="/admin/attendance" element={<AttendanceScanner name="Asistencia" />} />
       </Route>
 
@@ -66,7 +74,7 @@ function App() {
         <Route path="/trainer/members" element={<TrainerList name="Mis Alumnos" />} />
         <Route path="/trainer/plans" element={<ComingSoon name="Planes" />} />
         <Route path="/trainer/attendance" element={<AttendanceScanner name="Asistencia" />} />
-        
+
       </Route>
 
       {/* Member */}
@@ -76,9 +84,10 @@ function App() {
         <Route path="/member/my-classes" element={<MyClasses />} />
         <Route path="/member/plans" element={<MyPlans name="Mis Planes" />} />
         <Route path="/member/attendance" element={<MemberAttendance name="Mi Asistencia" />} />
-        <Route path="/member/payments" element={<ComingSoon name="Mis Pagos" />} />
+        <Route path="/member/payments" element={<MemberPayments name="Mis Pagos" />} />
+        <Route path="/member/payments/plans" element={<Plans />} />
         <Route path="/profile" element={<Profile />} />
-        
+
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />

@@ -18,6 +18,9 @@ app.use(cors({
     origin: process.env.FRONTEND_URL,
     credentials: true,
 }));
+// Webhook de Stripe (necesita raw body)
+app.use('/api/payments/webhook', express.raw({ type: 'application/json' }));
+
 app.use(express.json());
 // Deshabilitar caché en desarrollo
 app.use((req, res, next) => {
@@ -33,6 +36,7 @@ app.use('/uploads', (req, res, next) => {
 app.use(express.urlencoded({ extended: true }));
 
 // Rutas
+app.use('/api/payments', require('./routes/payment.routes'));
 app.use('/api/auth', require('./routes/auth.routes'));
 app.use('/api/users', require('./routes/user.routes'));
 app.use('/api/classes', require('./routes/class.routes'));
